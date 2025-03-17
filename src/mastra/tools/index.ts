@@ -1,14 +1,16 @@
-import { createTool } from '@mastra/core/tools';
-import { z } from 'zod';
-import { Agent } from '@mastra/core/agent';
-import { searchWeb } from './search';
-import { openai } from '@ai-sdk/openai';
-import { createReport } from './report';
+import { createTool } from "@mastra/core/tools";
+import { z } from "zod";
+import { Agent } from "@mastra/core/agent";
+import { searchWeb } from "./search";
+import { openai } from "@ai-sdk/openai";
+import { createReport } from "./report";
 
 const createAgent = (name: string, instructions: string) =>
-  new Agent({ name, instructions, model: openai('gpt-4o') });
+  new Agent({ name, instructions, model: openai("gpt-4o") });
 
-export const QuestionAgent = createAgent('Question Agent', `
+export const QuestionAgent = createAgent(
+  "Question Agent",
+  `
 ROLE DEFINITION: You are an AI specialized in generating follow-up research questions. Your primary role is to assist educators, researchers, and students by creating insightful and thought-provoking questions based on given answers. 
 
 CORE CAPABILITIES: You can analyze provided answers to identify key themes and areas for further exploration. You possess knowledge across various academic disciplines and can generate questions that encourage deeper investigation. You have access to a database of academic topics and research methodologies.
@@ -18,9 +20,12 @@ BEHAVIORAL GUIDELINES: Maintain a formal and academic tone in your questions. En
 CONSTRAINTS & BOUNDARIES: Do not generate questions that are off-topic or unrelated to the given answer. Avoid questions that require personal opinions or speculative answers. Ensure that all questions respect privacy and do not include sensitive or confidential information.
 
 SUCCESS CRITERIA: Questions should be relevant, insightful, and aligned with the given answer. They should stimulate further research and discussion. Performance is measured by the relevance and depth of the questions generated.
-`);
+`
+);
 
-export const CustomQuestionAgent = createAgent("Unique Question Validator Agent", `
+export const CustomQuestionAgent = createAgent(
+  "Unique Question Validator Agent",
+  `
   ### ROLE DEFINITION
 You are an AI Question Validator, responsible for assessing the equivalence of a target question to a set of given questions. Your primary users are developers and researchers who need to ensure thematic consistency in question sets.
 
@@ -52,9 +57,12 @@ You are an AI Question Validator, responsible for assessing the equivalence of a
 - If the target question is equivalent to the set, generate and return a new question.
 - If not equivalent or if the set is empty, return the target question.
 
-  `);
+  `
+);
 
-export const QuestionPickerAgent = createAgent('Question Picker Agent', `
+export const QuestionPickerAgent = createAgent(
+  "Question Picker Agent",
+  `
   ROLE DEFINITION: You are an AI Research Assistant specializing in evaluating research questions. Your primary responsibility is to assess and select the most research-focused question from a pair of options provided to you. 
   CORE CAPABILITIES: You have the ability to analyze questions based on research potential, clarity, and relevance. You possess knowledge of research methodologies and criteria for high-quality research questions. 
   BEHAVIORAL GUIDELINES: Maintain a professional and objective tone. Use a systematic approach to evaluate each question, considering factors such as specificity, feasibility, and potential impact. 
@@ -63,9 +71,41 @@ export const QuestionPickerAgent = createAgent('Question Picker Agent', `
   Avoid selecting questions that fall outside the realm of research-focused inquiries. 
   SUCCESS CRITERIA: The selected question should demonstrate clear research potential and align with academic standards. 
   Your decision should consistently reflect a high level of discernment and accuracy.
-`);
+`
+);
 
-export const ContentPickerAgent = createAgent('Content Picker Agent', `
+export const StatsAgent = createAgent(
+  "Stats Agent",
+  `
+  ROLE DEFINITION:
+  You are an AI specialized in formulating a single, precise statistical research question that focuses on percentage-based insights.
+  
+  CORE CAPABILITIES:
+  - Analyze the given topic to determine the most relevant statistical question.
+  - Ensure the question is structured to elicit a percentage-based response.
+  - Maintain clarity, specificity, and research-oriented phrasing.
+  
+  BEHAVIORAL GUIDELINES:
+  - Always return only one well-structured statistical research question.
+  - Maintain a formal and data-driven approach.
+  - Use logical reasoning to ensure relevance and accuracy.
+  - Handle ambiguities by making reasonable assumptions or requesting clarification.
+  
+  CONSTRAINTS & BOUNDARIES:
+  - Do not generate more than one question per request.
+  - Ensure the question is objective, measurable, and percentage-driven.
+  - Adhere to ethical research standards and avoid sensitive or confidential topics.
+  
+  SUCCESS CRITERIA:
+  - The question must be clear, precise, and structured for a percentage-based result.
+  - It should align with sound statistical practices and research methodologies.
+  - Performance is measured by the relevance and effectiveness of the generated question.
+  `
+);
+
+export const ContentPickerAgent = createAgent(
+  "Content Picker Agent",
+  `
  
 #### a) ROLE DEFINITION
 - **Role**: Research Assistant AI
@@ -96,15 +136,19 @@ export const ContentPickerAgent = createAgent('Content Picker Agent', `
 
 ### Instructions
 - **RETURN "1" OR "2" TO INDICATE YOUR CHOICE**
-`);
-
-
+`
+);
 
 export const searchWebForReport = createTool({
-  id: 'search-web',
-  description: 'Search the web for an answer and generate a report without citations.',
-  inputSchema: z.object({ searchQuery: z.string().describe('The query to search the web.') }),
-  outputSchema: z.object({ report: z.string().optional().describe('Generated report.') }),
+  id: "search-web",
+  description:
+    "Search the web for an answer and generate a report without citations.",
+  inputSchema: z.object({
+    searchQuery: z.string().describe("The query to search the web."),
+  }),
+  outputSchema: z.object({
+    report: z.string().optional().describe("Generated report."),
+  }),
   execute: async ({ context }) => {
     const report = await searchWeb(context.searchQuery, 0, false);
     return { report };
@@ -112,10 +156,15 @@ export const searchWebForReport = createTool({
 });
 
 export const searchWebForReportWithCitations = createTool({
-  id: 'search-web-citations',
-  description: 'Search the web for content and generate a report with citations.',
-  inputSchema: z.object({ searchQuery: z.string().describe('The query to search the web.') }),
-  outputSchema: z.object({ report: z.string().optional().describe('Generated report with citations.') }),
+  id: "search-web-citations",
+  description:
+    "Search the web for content and generate a report with citations.",
+  inputSchema: z.object({
+    searchQuery: z.string().describe("The query to search the web."),
+  }),
+  outputSchema: z.object({
+    report: z.string().optional().describe("Generated report with citations."),
+  }),
   execute: async ({ context }) => {
     const report = await searchWeb(context.searchQuery, 0, true);
     return { report };
@@ -123,13 +172,18 @@ export const searchWebForReportWithCitations = createTool({
 });
 
 export const generateReportTool = createTool({
-  id: 'generate markdown report',
-  description: 'Generate markdown report locally',
-  inputSchema: z.object({ report: z.string().describe('The generated report') }),
+  id: "generate markdown report",
+  description: "Generate markdown report locally",
+  inputSchema: z.object({
+    report: z.string().describe("The generated report"),
+  }),
   execute: async ({ context }) => {
-    const report = await createReport("real-report", context.report, "markdown");
-    console.log('Generated Real report at: ', report);
+    const report = await createReport(
+      "real-report",
+      context.report,
+      "markdown"
+    );
+    console.log("Generated Real report at: ", report);
     return { report };
   },
 });
-

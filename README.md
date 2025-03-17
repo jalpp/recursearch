@@ -67,6 +67,12 @@ can view digrams to understand the flow.
 
 this tool was created to research how agents can generate research reports, the tool must not be used unethically, the authors of recursearch take no responsibility in doing so.
 
+## Papers:
+
+Recursearch was inspired by following paper:
+
+- [Multi-Agent Collaboration Mechanisms: A Survey of LLMs](https://arxiv.org/pdf/2501.06322)
+
 ## License
 
 MIT

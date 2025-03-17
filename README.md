@@ -6,17 +6,18 @@
 
 - **Recursive Web Search**: Perform multi-layered web searches, diving deeper into follow-up questions.
 - **AI-Powered Agents**: Specialized agents for generating, validating, and picking research questions and web content.
+- **Stats support**: the reports are backed by stats 
 - **Citations Support**: Option to generate research reports with citations.
 - **Customizable Depth**: Control the search depth of research.
 
 ## Installation
 
-Ensure you have **Node.js** installed, then add the dependencies:
+Ensure you have **Node.js v18+** installed, then add the dependencies:
 
 ```bash
 
 cd /recursearch
-npm install @mastra/core @ai-sdk/openai @tavily/core zod
+npm i
 ```
 
 Set up env variables:
@@ -24,6 +25,8 @@ Set up env variables:
 ```
 OPENAI_API_KEY=your-openai-api-key
 TAVILY_API_KEY=your-tavily-api-key
+EXA_API_KEY=your-exa-api-key
+
 ```
 
 Run Mastra Dev server to create reports
@@ -48,6 +51,9 @@ Validates whether a newly generated question is thematically unique or overlaps 
 
 - **Question Picker Agent:**
 Compares pairs of research questions and selects the most research-focused one.
+
+- **Stats Agent**
+Responsible for generating stats question for given running question to support research content by data
 
 - **Content Picker Agent:**
 Evaluates and picks the most relevant and credible web source from two given options. [When Citations are required]

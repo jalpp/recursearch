@@ -20,6 +20,8 @@ let reportBuilder = "";
 let reportWithCitationBuilder = "";
 let citations = "";
 let statsReport = "";
+let relatedImages = "";
+let imageCount = 0;
 
 // Question Tracking
 const pickedQuestionSet: string[] = [];
@@ -38,8 +40,8 @@ export async function searchWeb(
       ? pickedQuestionSetCitations
       : pickedQuestionSet;
     const finalReport = withCitations
-      ? `${reportWithCitationBuilder}\n **Statistics** \n ${statsReport}\n **Citations** \n ${citations}`
-      : `${reportBuilder}\n Statistics \n${statsReport}`;
+      ? `**Report: ** \n ${reportWithCitationBuilder}\n **Statistics: ** \n ${statsReport}\n **Images:** \n ${relatedImages} \n**Citations:** \n ${citations}`
+      : `**Report: ** \n ${reportBuilder}\n **Statistics: ** \n${statsReport} \n **Images: ** \n${relatedImages}`;
 
     logData("FINAL REPORT:", finalReport);
 
@@ -63,11 +65,18 @@ export async function searchWeb(
     searchDepth: "basic",
     includeRawContent: true,
     includeAnswer: true,
-    includeImages: false,
+    includeImages: true,
+    includeImageDescriptions: true,
   });
 
   const topicAnswer = res.answer || "No answer found";
   reportBuilder += `${topicAnswer}\n`;
+  if (imageCount < MAX_DEPTH) {
+    const diagram = res.images[0];
+    if (diagram.description) {
+      relatedImages += `![${diagram.description}](${diagram.url})\n`;
+    }
+  }
 
   if (withCitations && res.results.length >= 2) {
     return handleCitations(res, topicAnswer, depth);

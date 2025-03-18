@@ -176,10 +176,11 @@ export const generateReportTool = createTool({
   description: "Generate markdown report locally",
   inputSchema: z.object({
     report: z.string().describe("The generated report"),
+    page: z.number().describe("The current page number"),
   }),
   execute: async ({ context }) => {
     const report = await createReport(
-      "real-report",
+      `real-report-${context.page}`,
       context.report,
       "markdown"
     );

@@ -7,6 +7,8 @@
 - **Recursive Web Search**: Perform multi-layered web searches, diving deeper into follow-up questions.
 - **AI-Powered Agents**: Specialized agents for generating, validating, and picking research questions and web content.
 - **Stats support**: the reports are backed by stats 
+- **Images:** the reports contain related searched images
+- **Pages:** the report can be generated up to 2 pages
 - **Citations Support**: Option to generate research reports with citations.
 - **Customizable Depth**: Control the search depth of research.
 

@@ -5,6 +5,7 @@ import {
   QuestionPickerAgent,
   CustomQuestionAgent,
   StatsAgent,
+  ImageQueryAgent,
 } from ".";
 import { createReport } from "./report";
 import Exa from "exa-js";
@@ -71,12 +72,25 @@ export async function searchWeb(
 
   const topicAnswer = res.answer || "No answer found";
   reportBuilder += `${topicAnswer}\n`;
-  if (imageCount < MAX_DEPTH) {
-    const diagram = res.images[0];
+
+  const searchDiagram = await ImageQueryAgent.generate(`Generate a search query for following: ${topicAnswer}`);
+
+  logData("Image Diagram Query", searchDiagram.text);
+
+  const diagramres = await tvly.search(searchDiagram.text, {
+    searchDepth: "basic",
+    includeImages: true, 
+    includeImageDescriptions: true,
+  });
+
+  if (imageCount < MAX_DEPTH) { // limit the image search to not get rate limited and get the most top root images 
+    const diagram = diagramres.images[0];
     if (diagram.description) {
+      logData("Candidate Diagram: ", `![${diagram.description}](${diagram.url})\n`)
       relatedImages += `![${diagram.description}](${diagram.url})\n`;
     }
   }
+  imageCount++;
 
   if (withCitations && res.results.length >= 2) {
     return handleCitations(res, topicAnswer, depth);

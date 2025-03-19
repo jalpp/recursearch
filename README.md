@@ -1,6 +1,6 @@
 # 🌐 RecurSearch
 
-**RecurSearch** is a AI-driven recursive web research tool designed to mimic OpenAI's Deep Research. It can search the web recursively to generate comprehensive research reports with or without citations.
+**RecurSearch** is an AI-driven recursive web research tool designed to mimic OpenAI's Deep Research. It can search the web recursively to generate comprehensive research reports with or without citations.
 
 ## Features
 

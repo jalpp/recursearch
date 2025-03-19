@@ -12,6 +12,7 @@
 - **Logging** with reports, the local generated copy by all the agents plus log data is kept in local-log and local-report files to explore agents answers
 - **Citations Support**: Option to generate research reports with citations.
 - **Customizable Depth**: Control the search depth of research.
+- **Auto Generated Report**: the reports, logs, and local report are automatically generated locally by agent
 
 ## Installation
 

@@ -90,7 +90,6 @@ Preview:
 
 this tool was created to research how agents can generate research reports, the tool must not be used unethically, the authors of recursearch take no responsibility in doing so.
 
-
 ## Papers:
 
 Recursearch was inspired by following paper:
@@ -100,7 +99,9 @@ Recursearch was inspired by following paper:
 
 ## License
 
-MIT
+GPL
+
+Please see the license requirements
 
 ## Authors:
 

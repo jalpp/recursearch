@@ -45,8 +45,7 @@ Go to search agent and ask it to generate reports.
 RecurSearch leverages multiple AI agents with distinct roles:
 
 - **Search Agent**
-Understands users query to call the searchAgentTool which kicks of the agents works
-Take the generated report and finalize to meet user report requirements.
+Understands users query to call the searchAgentTool which kicks of MAS, its also responsible understand and format the report to meet user defined requirements.
 
 - **Question Agent:**
 Generates thought-provoking follow-up research questions based on content.

@@ -1,7 +1,7 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { Agent } from "@mastra/core/agent";
-import { searchWeb } from "./search";
+import { searchWeb, simepleSearch, imageSearch } from "./search";
 import { openai } from "@ai-sdk/openai";
 import { createReport } from "./report";
 
@@ -195,6 +195,40 @@ export const searchWebForReportWithCitations = createTool({
   execute: async ({ context }) => {
     const report = await searchWeb(context.searchQuery, 0, true);
     return { report };
+  },
+});
+
+export const searchWebForAnswer = createTool({
+  id: "search-web-directly",
+  description:
+    "Search the web for answer with/without citations",
+  inputSchema: z.object({
+    searchQuery: z.string().describe("The query to search the web."),
+  }),
+  outputSchema: z.object({
+    answer: z.object({
+      answer: z.string().describe("the answer for the query"),
+      citations: z.array(z.string()).describe("the citations for the answer"),
+    })
+  }),
+  execute: async ({ context }) => {
+    const answer = await simepleSearch(context.searchQuery);
+    return { answer: answer };
+  },
+});
+
+export const searchImage = createTool({
+  id: "search-image",
+  description: "Search the web for images based on a query.",
+  inputSchema: z.object({
+    searchQuery: z.string().describe("The query to search for images."),
+  }),
+  outputSchema: z.object({
+    images: z.array(z.string()).optional().describe("The array of markdown format for images "),
+  }),
+  execute: async ({ context }) => {
+    const images = await imageSearch(context.searchQuery);
+    return { images };
   },
 });
 

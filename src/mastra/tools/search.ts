@@ -7,6 +7,7 @@ import {
   StatsAgent,
   ImageQueryAgent,
 } from ".";
+
 import { createReport } from "./report";
 import Exa from "exa-js";
 
@@ -29,7 +30,60 @@ const pickedQuestionSet: string[] = [];
 const statsQuestionSet: string[] = [];
 const pickedQuestionSetCitations: string[] = [];
 
+interface SimpleSearch {
+  answer: string,
+  citations: string[]
+}
+
 let logger = "";
+
+
+export async function simepleSearch(
+ query: string,
+) : Promise<SimpleSearch> {
+
+  let answerReport = '';
+  let incitations = '';
+  const citations: string[] = [];
+
+  const res = await exa.answer(query);
+
+  const topicAnswer = res.answer || "Unknown answer";
+  answerReport += `${topicAnswer}\n`;
+
+    for (const citation of res.citations) {
+      if (citation.url) {
+          incitations += `${citation.url}\n`;
+          citations.push(citation.url);
+      }
+    }
+
+    answerReport += `## CITATIONS: \n ${incitations}`;
+    
+    const answer: SimpleSearch = {
+      answer: answerReport.trim(),
+      citations: citations,
+    };
+
+  return answer;
+}
+
+export async function imageSearch(query: string): Promise<string[]> {
+  let images: string[] = [];
+
+  const diagramres = await tvly.search(query, {
+    searchDepth: "basic",
+    includeImages: true, 
+    includeImageDescriptions: true,
+  });
+
+  const diagram = diagramres.images[0];
+  if (diagram.description) {
+    images.push(`![${diagram.description}](${diagram.url})\n`);
+  }
+
+  return images;
+}
 
 export async function searchWeb(
   searchQuery: string,

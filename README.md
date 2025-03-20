@@ -103,12 +103,12 @@ The examples include reports on
 - Impact of AI-Generated Content on Journalism and Media Credibility
 - Impact of Music Therapy on Individuals with Depression
 
-the `reports/network` contain the AgentNetwork's version report, these reports are non-deterministic in terms the quality of facts/citations and images but still are good template reports.
+the `reports/network` contain the AgentNetwork's version report, these reports are non-deterministic in terms the quality of facts/citations and images but still are good template reports. Again I didn't touch/modify them.
 
 Some examples include reports on 
 - General Report on Recommendation Algorithms and User Behavior on Social Media
 - Impact of Music Therapy on Individuals with Depression
-- he Influence of Chronic Stress on Immune System Function
+- The Influence of Chronic Stress on Immune System Function
 
 
 ## Use/Terms

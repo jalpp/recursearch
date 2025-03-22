@@ -59,6 +59,9 @@ export async function simepleSearch(
     }
 
     answerReport += `## CITATIONS: \n ${incitations}`;
+
+    console.log(answerReport);
+    console.log(citations);
     
     const answer: SimpleSearch = {
       answer: answerReport.trim(),
@@ -81,6 +84,8 @@ export async function imageSearch(query: string): Promise<string[]> {
   if (diagram.description) {
     images.push(`![${diagram.description}](${diagram.url})\n`);
   }
+
+  console.log(images);
 
   return images;
 }

@@ -237,11 +237,18 @@ export const generateReportTool = createTool({
   description: "Generate markdown report locally",
   inputSchema: z.object({
     report: z.string().describe("The generated report"),
+    filename: z.string().optional().describe("the file name"),
     page: z.number().describe("The current page number"),
   }),
   execute: async ({ context }) => {
+
+    let reportName = '';
+    if(context.filename){
+      reportName += context.filename;
+    }
+
     const report = await createReport(
-      `real-report-${context.page}`,
+      `${reportName}-real-report-${context.page}`,
       context.report,
       "markdown"
     );

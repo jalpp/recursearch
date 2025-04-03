@@ -132,6 +132,10 @@ Some examples include reports on
 
 the `reports/network/debate` contain research report that have been debated and judge, this reports don't contain real data from web or stats as this shows how agents argue for their points without research from outside.
 
+Some examples include reports on
+- Benefits of debate on research report
+- Music theraphy influence on depression
+- Phone usage vs mental health
 
 ## Use/Terms
 

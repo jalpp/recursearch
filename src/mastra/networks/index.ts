@@ -1,7 +1,7 @@
 import { AgentNetwork } from "@mastra/core/network";
 import { openai } from "@ai-sdk/openai";
 import { citationAgent, imageSearchAgent, plannerAgent, reportFormattingAgent, simpleSearchAgent, evaluatorAgent, researchPlanEvaluatorAgent, topicGeneratorAgent } from "../agents";
-import { CustomQuestionAgent, ImageQueryAgent, QuestionAgent, QuestionPickerAgent, StatsAgent } from "../tools";
+import { CustomQuestionAgent, ImageQueryAgent, QuestionAgent, QuestionPickerAgent, ReportJudgeAgent, ResearchCriticAgent, ResearchPresenterAgent, StatsAgent } from "../tools";
 
 const recurFlow = `
  Given this agents generate the report in a decision tree fashion, pick the logical path by validating questions, for each level make sure you search an image, and stats for that validated question.
@@ -48,4 +48,22 @@ export const recursearchNetwork = new AgentNetwork({
     `,
     model: openai('gpt-4o'),
     agents: [topicGeneratorAgent, plannerAgent, researchPlanEvaluatorAgent, evaluatorAgent, simpleSearchAgent, imageSearchAgent, reportFormattingAgent, QuestionAgent, QuestionPickerAgent, CustomQuestionAgent, ImageQueryAgent, StatsAgent, citationAgent],
+  });
+
+  export const debateSimulationNetwork = new AgentNetwork({
+    name: 'Debate Simulation Network',
+    instructions: `
+    For given research topic from the user:
+    Simulate a debate between two agents: a Presenter and a Critique.
+    The Presenter defends a research report, while the Critique challenges it.
+    The debate will last for 1 turn, with each agent presenting their arguments in each turn.
+    After 1 turns, the Judge agent will evaluate the arguments and decide on the final research report.
+    The final chosen research report must be generated and formatted for output.
+    Ensure the debate is structured and adheres to logical reasoning.
+    Finally which ever report wins from Judge generate a local copy of that report
+    `,
+    model: openai('gpt-4o'),
+    agents: [
+      reportFormattingAgent, ResearchPresenterAgent, ResearchCriticAgent, ReportJudgeAgent
+    ],
   });

@@ -13,11 +13,11 @@
   "description": "",
   "dependencies": {
     "@ai-sdk/openai": "^1.2.5",
-    "@mastra/core": "^0.6.3",
-    "@tavily/core": "^0.3.1",
+    "@mastra/core": "^0.8.1",
+    "@tavily/core": "^0.3.5",
     "dotenv": "^16.4.7",
     "exa-js": "^1.5.12",
-    "mastra": "^0.4.2",
+    "mastra": "^0.4.7",
     "zod": "^3.24.2"
   },
   "devDependencies": {

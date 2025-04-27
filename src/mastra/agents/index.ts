@@ -1,12 +1,15 @@
-import { openai } from "@ai-sdk/openai";
+
 import { Agent } from "@mastra/core/agent";
 import {
+  generateEvalReportTool,
   generateReportTool,
   searchImage,
   searchWebForAnswer,
   searchWebForReport,
   searchWebForReportWithCitations,
 } from "../tools";
+import { EVALS, MEMORY, MODEL } from "../config/config";
+
 
 export const searchAgent = new Agent({
   name: "Search Report Agent",
@@ -54,13 +57,18 @@ You are a Search Report Agent tasked with generating comprehensive and well-stru
 - Ensure all reports are free from plagiarism and properly cite sources when required.
 - Achieve user satisfaction by providing clear, concise, and well-organized report.
 - Maintain a high level of accuracy and relevance in the information presented.
-- **YOU MUST** Generate a local copy of the report by calling generateReportTool`,
-  model: openai("gpt-4o"),
+- **YOU MUST** Generate a local copy of the report by calling generateReportTool
+- **YOU MUST** Generate a local copy of the Eval report by calling generateEvalReportTool
+`,
+  model: MODEL,
   tools: {
     searchWebForReport,
     searchWebForReportWithCitations,
     generateReportTool,
+    generateEvalReportTool
   },
+  memory: MEMORY,
+  evals: EVALS
 });
 
 export const simpleSearchAgent = new Agent({
@@ -89,7 +97,7 @@ Your primary responsibility is to deliver accurate and relevant information.
 - Deliver concise and accurate answers to user queries.
 - Provide citations when requested, ensuring user satisfaction.
 - Maintain a high level of relevance in the information presented.`,
-  model: openai("gpt-4o"),
+  model: MODEL,
   tools: {
     searchWebForAnswer
   },
@@ -138,10 +146,12 @@ You are a Report Formatting Agent tasked with formatting research reports to ens
 ### SUCCESS CRITERIA
 - Deliver a well-formatted report that meets academic standards.
 - Ensure the report is clear, concise, and easy to read.
-- Generate a local copy of the formatted report using the generateReportTool.`,
-  model: openai("gpt-4o"),
+- Generate a local copy of the formatted report using the generateReportTool.
+- **YOU MUST** Generate a local copy of the Eval report by calling generateEvalReportTool
+`,
+  model: MODEL,
   tools: {
-    generateReportTool,
+    generateReportTool, generateEvalReportTool
   },
 });
 
@@ -169,7 +179,7 @@ You are an Image Search Agent tasked with searching the web for image URLs relev
 - Deliver accurate and relevant image URLs to user queries.
 - Ensure user satisfaction by providing high-quality and contextually appropriate images.
 - Maintain a high level of accuracy and relevance in the image search results.`,
-  model: openai("gpt-4o"),
+  model: MODEL,
   tools: {
    searchImage
   },
@@ -200,7 +210,7 @@ You are a Citation Agent tasked with handling citations for given citation sourc
 - Deliver properly formatted and accurate citations.
 - Ensure all citations are unique and relevant to the context.
 - Maintain user satisfaction by providing clear and concise citation handling.`,
-  model: openai("gpt-4o"),
+  model: MODEL,
 });
 
 export const plannerAgent = new Agent({
@@ -241,7 +251,7 @@ You are a Research Planner Agent tasked with creating a structured research plan
 - Deliver a well-structured and actionable research plan.
 - Ensure the plan is relevant to the user's query and easy to follow.
 - Maintain user satisfaction by providing clear and concise guidance.`,
-  model: openai("gpt-4o"),
+  model: MODEL,
 });
 
 export const researchPlanEvaluatorAgent = new Agent({
@@ -280,7 +290,7 @@ You are a Research Plan Evaluator Agent tasked with evaluating research plans an
 - Deliver a comprehensive evaluation of the research plan.
 - Provide actionable and constructive feedback to improve the plan's quality and feasibility.
 - Maintain user satisfaction by offering clear and helpful suggestions.`,
-  model: openai("gpt-4o"),
+  model: MODEL,
 });
 
 export const evaluatorAgent = new Agent({
@@ -309,7 +319,7 @@ You are a Research Report Evaluator Agent tasked with evaluating research report
 - Deliver a comprehensive evaluation of the report.
 - Provide actionable and constructive feedback to improve the report's quality.
 - Maintain user satisfaction by offering clear and helpful suggestions.`,
-  model: openai("gpt-4o"),
+  model: MODEL,
 });
 
 export const topicGeneratorAgent = new Agent({
@@ -338,6 +348,6 @@ You are a Research Topic Generator Agent tasked with generating relevant and eng
 - Deliver a list of well-defined and relevant research topics.
 - Provide brief descriptions or context for each topic to enhance user understanding.
 - Maintain user satisfaction by offering clear and engaging topic suggestions.`,
-  model: openai("gpt-4o"),
-  tools: {},
+  model: MODEL,
 });
+

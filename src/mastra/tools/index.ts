@@ -2,11 +2,13 @@ import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { Agent } from "@mastra/core/agent";
 import { searchWeb, simepleSearch, imageSearch } from "./search";
-import { openai } from "@ai-sdk/openai";
 import { createReport } from "./report";
+import { MODEL } from "../config/config";
+import { generateEvalReport } from "./eval";
+import { report } from "process";
 
-const createAgent = (name: string, instructions: string) =>
-  new Agent({ name, instructions, model: openai("gpt-4o") });
+export const createAgent = (name: string, instructions: string) =>
+  new Agent({ name, instructions, model: MODEL });
 
 export const QuestionAgent = createAgent(
   "Question Agent",
@@ -100,6 +102,7 @@ export const StatsAgent = createAgent(
   - The question must be clear, precise, and structured for a percentage-based result.
   - It should align with sound statistical practices and research methodologies.
   - Performance is measured by the relevance and effectiveness of the generated question.
+  - If you do not have enough information DO NOT decline or ask for provide more info, provide a query related to it
   `
 );
 
@@ -126,6 +129,7 @@ export const ImageQueryAgent = createAgent(
 
   SUCCESS CRITERIA:
   - The generated queries should retrieve diagrams and visual content that are relevant, high-quality, and suitable for research purposes.
+  - If you do not have enough information DO NOT decline or ask for provide more info, provide a query related to it
   - You must only return the search query
   `
 );
@@ -294,8 +298,7 @@ export const searchWebForReportWithCitations = createTool({
 
 export const searchWebForAnswer = createTool({
   id: "search-web-directly",
-  description:
-    "Search the web for answer with/without citations",
+  description: "Search the web for answer with/without citations",
   inputSchema: z.object({
     searchQuery: z.string().describe("The query to search the web."),
   }),
@@ -303,7 +306,7 @@ export const searchWebForAnswer = createTool({
     answer: z.object({
       answer: z.string().describe("the answer for the query"),
       citations: z.array(z.string()).describe("the citations for the answer"),
-    })
+    }),
   }),
   execute: async ({ context }) => {
     const answer = await simepleSearch(context.searchQuery);
@@ -318,7 +321,10 @@ export const searchImage = createTool({
     searchQuery: z.string().describe("The query to search for images."),
   }),
   outputSchema: z.object({
-    images: z.array(z.string()).optional().describe("The array of markdown format for images "),
+    images: z
+      .array(z.string())
+      .optional()
+      .describe("The array of markdown format for images "),
   }),
   execute: async ({ context }) => {
     const images = await imageSearch(context.searchQuery);
@@ -335,9 +341,8 @@ export const generateReportTool = createTool({
     page: z.number().describe("The current page number"),
   }),
   execute: async ({ context }) => {
-
-    let reportName = '';
-    if(context.filename){
+    let reportName = "";
+    if (context.filename) {
       reportName += context.filename;
     }
 
@@ -348,5 +353,31 @@ export const generateReportTool = createTool({
     );
     console.log("Generated Real report at: ", report);
     return { report };
+  },
+});
+
+export const generateEvalReportTool = createTool({
+  id: "generate Eval report for given research report",
+  description:
+    "Generate Model's eval report on how well is the research report",
+  inputSchema: z.object({
+    report: z.string().describe("The generated report"),
+    filename: z.string().optional().describe("the file name"),
+    page: z.number().describe("The current page number"),
+    rootQuery: z.string().describe("The root question for the research report"),
+  }),
+  execute: async ({ context }) => {
+    let reportName = "";
+    if (context.filename) {
+      reportName = `${context.filename}-${context.page}`;
+    }
+
+    const evalReport = generateEvalReport(
+      context.rootQuery,
+      context.report,
+      reportName
+    );
+
+    return { evalReport };
   },
 });

@@ -31,19 +31,15 @@ const statsQuestionSet: string[] = [];
 const pickedQuestionSetCitations: string[] = [];
 
 interface SimpleSearch {
-  answer: string,
-  citations: string[]
+  answer: string;
+  citations: string[];
 }
 
 let logger = "";
 
-
-export async function simepleSearch(
- query: string,
-) : Promise<SimpleSearch> {
-
-  let answerReport = '';
-  let incitations = '';
+export async function simepleSearch(query: string): Promise<SimpleSearch> {
+  let answerReport = "";
+  let incitations = "";
   const citations: string[] = [];
 
   const res = await exa.answer(query);
@@ -51,22 +47,22 @@ export async function simepleSearch(
   const topicAnswer = res.answer || "Unknown answer";
   answerReport += `${topicAnswer}\n`;
 
-    for (const citation of res.citations) {
-      if (citation.url) {
-          incitations += `${citation.url}\n`;
-          citations.push(citation.url);
-      }
+  for (const citation of res.citations) {
+    if (citation.url) {
+      incitations += `${citation.url}\n`;
+      citations.push(citation.url);
     }
+  }
 
-    answerReport += `## CITATIONS: \n ${incitations}`;
+  answerReport += `## CITATIONS: \n ${incitations}`;
 
-    console.log(answerReport);
-    console.log(citations);
-    
-    const answer: SimpleSearch = {
-      answer: answerReport.trim(),
-      citations: citations,
-    };
+  console.log(answerReport);
+  console.log(citations);
+
+  const answer: SimpleSearch = {
+    answer: answerReport.trim(),
+    citations: citations,
+  };
 
   return answer;
 }
@@ -76,7 +72,7 @@ export async function imageSearch(query: string): Promise<string[]> {
 
   const diagramres = await tvly.search(query, {
     searchDepth: "basic",
-    includeImages: true, 
+    includeImages: true,
     includeImageDescriptions: true,
   });
 
@@ -132,20 +128,26 @@ export async function searchWeb(
   const topicAnswer = res.answer || "No answer found";
   reportBuilder += `${topicAnswer}\n`;
 
-  const searchDiagram = await ImageQueryAgent.generate(`Generate a search query for following: ${topicAnswer}`);
+  const searchDiagram = await ImageQueryAgent.generate(
+    `Generate a search query for following: ${topicAnswer}`
+  );
 
   logData("Image Diagram Query", searchDiagram.text);
 
   const diagramres = await tvly.search(searchDiagram.text, {
     searchDepth: "basic",
-    includeImages: true, 
+    includeImages: true,
     includeImageDescriptions: true,
   });
 
-  if (imageCount < MAX_DEPTH) { // limit the image search to not get rate limited and get the most top root images 
+  if (imageCount < MAX_DEPTH) {
+    // limit the image search to not get rate limited and get the most top root images
     const diagram = diagramres.images[0];
     if (diagram.description) {
-      logData("Candidate Diagram: ", `![${diagram.description}](${diagram.url})\n`)
+      logData(
+        "Candidate Diagram: ",
+        `![${diagram.description}](${diagram.url})\n`
+      );
       relatedImages += `![${diagram.description}](${diagram.url})\n`;
     }
   }

@@ -66,4 +66,5 @@ export const recursearchNetwork = new AgentNetwork({
     agents: [
       reportFormattingAgent, ResearchPresenterAgent, ResearchCriticAgent, ReportJudgeAgent
     ],
+    
   });

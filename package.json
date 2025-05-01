@@ -18,6 +18,7 @@
     "@ai-sdk/perplexity": "^1.1.8",
     "@mastra/core": "^0.9.0",
     "@mastra/evals": "^0.1.19",
+    "@mastra/libsql": "^0.0.1",
     "@mastra/memory": "^0.3.0",
     "@tavily/core": "^0.5.0",
     "dotenv": "^16.4.7",

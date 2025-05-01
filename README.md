@@ -32,7 +32,7 @@ npm i
 Set up env variables in `.env.development`:
 
 ```
-OPENAI_API_KEY=your-openai-api-key
+OPENAI_API_KEY=your-openai-api-key // change according to model you using
 TAVILY_API_KEY=your-tavily-api-key
 EXA_API_KEY=your-exa-api-key
 
@@ -48,6 +48,21 @@ npm run dev
 Go to search agent and ask it to generate reports, the search agent also as memory enabled so you can ask previous questions
 
 For AgentNetwork go to networks tab and ask it to generate reports.
+
+## Model Config
+
+You can change the working base model of recursearch by going to `config/config.ts` and changing the value of `CURRENT_MODEL` variable, the env variable names for the providers can be found [here](https://sdk.vercel.ai/providers/ai-sdk-providers)
+
+Right now the following models come out of box
+
+- GPT (defualt)
+- Gemini: gemini-1.5-flash 
+- Anthropic: claude-3-sonnet-20240229
+- Perplexity: sonar-pro
+
+The `config/README.md` has a small guide on how to use other models, technically all models that are supported by ai-sdk can be imported but I only have added few in the config file.
+
+The `getCurrentModel()` can be directly used in agents property to define a system where different agents are part of various models, though all agents of recursearch use one base model, eventually I will add an example on how to do that.
 
 ## RecurSearch Agents
 RecurSearch leverages multiple AI agents with distinct roles:

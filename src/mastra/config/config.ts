@@ -44,7 +44,6 @@ export const MEMORY = new Memory({
       connectionUrl: 'file:../memory.db'
     })
 });
-
 export const EVALS = {answerRelevancy: new AnswerRelevancyMetric(MODEL), bias: new BiasMetric(MODEL), toxic: new ToxicityMetric(MODEL), tone: new ToneConsistencyMetric()}
 
 

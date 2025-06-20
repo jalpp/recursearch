@@ -119,7 +119,7 @@ export async function searchWeb(
 
   const res = await tvly.search(searchQuery, {
     searchDepth: "basic",
-    includeRawContent: true,
+    includeRawContent: "text",
     includeAnswer: true,
     includeImages: true,
     includeImageDescriptions: true,

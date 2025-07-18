@@ -16,18 +16,18 @@
     "@ai-sdk/google": "^1.2.14",
     "@ai-sdk/openai": "^1.2.5",
     "@ai-sdk/perplexity": "^1.1.8",
-    "@mastra/core": "^0.9.0",
-    "@mastra/evals": "^0.1.19",
-    "@mastra/libsql": "^0.0.1",
-    "@mastra/memory": "^0.3.0",
+    "@mastra/core": "^0.10.15",
+    "@mastra/evals": "^0.10.5",
+    "@mastra/libsql": "^0.11.0",
+    "@mastra/memory": "^0.11.3",
     "@tavily/core": "^0.5.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "^17.2.0",
     "exa-js": "^1.5.12",
-    "mastra": "^0.5.0",
+    "mastra": "^0.10.13",
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/node": "^22.13.10",
+    "@types/node": "^24.0.14",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }

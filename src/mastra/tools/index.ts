@@ -3,12 +3,14 @@ import { z } from "zod";
 import { Agent } from "@mastra/core/agent";
 import { searchWeb, simepleSearch, imageSearch } from "./search";
 import { createReport } from "./report";
-import { MODEL } from "../config/config";
 import { generateEvalReport } from "./eval";
-import { report } from "process";
+import { getCurrentModel } from "../config/config";
+
 
 export const createAgent = (name: string, instructions: string) =>
-  new Agent({ name, instructions, model: MODEL });
+  new Agent({ name, instructions, model: ({runtimeContext}) => {
+      return getCurrentModel(runtimeContext);
+  } });
 
 export const QuestionAgent = createAgent(
   "Question Agent",

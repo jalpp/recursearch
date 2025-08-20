@@ -1,5 +1,4 @@
 import { openai } from "@ai-sdk/openai";
-
 import { Memory } from "@mastra/memory";
 import {
   AnswerRelevancyMetric,
@@ -12,38 +11,57 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { perplexity } from "@ai-sdk/perplexity";
 import { LanguageModel } from "@mastra/core";
 import { LibSQLStore } from "@mastra/libsql";
+import { RuntimeContext } from "@mastra/core/runtime-context";
+import { OpenAIChatModelId } from "@ai-sdk/openai/internal";
+import { AnthropicMessagesModelId } from "@ai-sdk/anthropic/internal";
 
-enum ModelType {
-  // add other one if needed
-  GPT = "gpt",
-  GEMINI = "gemini",
-  CLAUDE = "claude",
-  PERPLEXITY = "perplexity",
-}
+type GoogleModel = 
+    | 'gemini-1.5-pro' 
+    | 'gemini-1.5-flash'
+    | 'gemini-2.0-flash'        
+    | 'gemini-2.0-flash-lite'     
+    | 'gemini-2.5-flash'     
+    | 'gemini-2.5-pro'                         
 
-const CURRENT_MODEL: ModelType = ModelType.GPT; // change model
+type Provider = "openai" | "anthropic" | "google" | "perplexity";
 
-export function getCurrentModel(currentModel: ModelType): LanguageModel {
-  switch (currentModel) {
-    case ModelType.GPT:
-      return openai("gpt-4o");
-    case ModelType.GEMINI:
-      return google("gemini-1.5-flash");
-    case ModelType.CLAUDE:
-      return anthropic("claude-3-sonnet-20240229");
-    case ModelType.PERPLEXITY:
+// change if needed
+const settingRunTimeContext = new RuntimeContext();
+settingRunTimeContext.set("provider", "openai");
+settingRunTimeContext.set("model", "gpt-4o-mini")
+
+// change if needed
+export const MAX_DEPTH = 5;
+
+export function getCurrentModel(runtimeContext: RuntimeContext): LanguageModel {
+  const provider = runtimeContext.get('provider') as Provider;
+  const model = runtimeContext.get('model');
+
+  if(provider && model){
+    switch (provider) {
+    case "openai":
+      return openai(model as OpenAIChatModelId);
+    case "google":
+      return google(model as GoogleModel);
+    case "anthropic":
+      return anthropic(model as AnthropicMessagesModelId);
+    case "perplexity":
       return perplexity("sonar-pro");
   }
+  }else{
+    return getCurrentModel(settingRunTimeContext);
+  }
+  
 }
 
-export const MODEL = getCurrentModel(CURRENT_MODEL);
+
 export const MEMORY = new Memory({
   storage: new LibSQLStore({ url: "file:../mastra.db" }),
 });
 
 export const EVALS = {
-  answerRelevancy: new AnswerRelevancyMetric(MODEL),
-  bias: new BiasMetric(MODEL),
-  toxic: new ToxicityMetric(MODEL),
+  answerRelevancy: new AnswerRelevancyMetric(settingRunTimeContext.get('model')),
+  bias: new BiasMetric(settingRunTimeContext.get('model')),
+  toxic: new ToxicityMetric(settingRunTimeContext.get('model')),
   tone: new ToneConsistencyMetric(),
 };

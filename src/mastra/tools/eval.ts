@@ -6,7 +6,8 @@ export async function generateEvalReport(
   finalreport: string,
   fileName: string
 ): Promise<void> {
-  const answerRelevancy = await EVALS.answerRelevancy.measure(
+ try{
+   const answerRelevancy = await EVALS.answerRelevancy.measure(
     rootQuery,
     finalreport
   );
@@ -27,4 +28,7 @@ Tone Score: ${tone.score}
   const reportpath = await createReport(fileName, report, "text");
 
   console.log("Eval report created at ", reportpath);
+ }catch(err){
+  console.log(err);
+ }
 }

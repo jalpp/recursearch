@@ -1,205 +1,168 @@
 # 🌐 RecurSearch
 
-**RecurSearch** is an AI-driven recursive web research tool designed to mimic OpenAI's Deep Research. It can search the web recursively to generate comprehensive research reports with or without citations.
+**RecurSearch** is an AI-driven recursive web research tool that performs comprehensive, multi-layered research similar to OpenAI's Deep Research. It uses specialized AI agents to generate detailed research reports with citations, statistics, and relevant images.
 
-## Features
+## ✨ Key Features
 
-- **Recursive Web Search**: Perform multi-layered web searches, diving deeper into follow-up questions.
-- **AI-Powered Agents**: Specialized agents for generating, validating, and picking research questions and web content.
-- **Stats support**: the reports are backed by stats 
-- **Images:** the reports contain related research focused searched images
-- **Pages:** the report can be generated up to 2 pages
-- **Logging** with reports, the local generated copy by all the agents plus log data is kept in local-log and local-report files to explore agents answers
-- **Citations Support**: Option to generate research reports with citations.
-- **Customizable Depth**: Control the search depth of research.
-- **Auto Generated Report**: the reports, logs, and local report are automatically generated locally by agent
-- **Evals Report**: There are eval report generated for each research report that measure toxicity, bias, answer relevancy score and the reason for the score.
+- **🔄 Recursive Web Search** - Multi-layered searches that dive deeper with intelligent follow-up questions
+- **🤖 AI-Powered Agent System** - Specialized agents for research generation, validation, and content curation
+- **📊 Statistical Support** - Reports backed by relevant data and statistics
+- **🖼️ Intelligent Image Selection** - Research-focused image searches and integration
+- **📄 Multi-Page Reports** - Generate comprehensive reports up to 2 pages
+- **📝 Citation Support** - Optional citation generation with credible sources
+- **🔧 Customizable Research Depth** - Control how deep the research goes
+- **📋 Comprehensive Logging** - Local logs and reports for transparency and debugging
+- **🔍 Quality Evaluation** - Automated evaluation for toxicity, bias, and answer relevancy
+- **🌐 AgentNetwork Integration** - Support for Mastra's AgentNetwork framework
 
-# AgentNetwork 
+## 🚀 Quick Start
 
-- Recursearch also has support for Mastra's AgentNetwork
+### Prerequisites
+- **Node.js v20+** installed on your system
 
-## Installation
+### Installation
 
-Ensure you have **Node.js v20+** installed, then add the dependencies:
+1. **Clone and navigate to the project:**
+   ```bash
+   cd recursearch
+   npm install
+   ```
 
-```bash
+2. **Set up environment variables in `.env.development`:**
+   ```env
+   OPENAI_API_KEY=your-openai-api-key
+   TAVILY_API_KEY=your-tavily-api-key
+   EXA_API_KEY=your-exa-api-key
+   ```
 
-cd recursearch
-npm i
-```
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
 
-Set up env variables in `.env.development`:
+4. **Generate reports:**
+   - Go to the **Search Agent** tab in the Mastra playground running at `localhost:4411` and request report generation
+   - The search agent has memory enabled for follow-up questions
+   - For AgentNetwork features, use the **Networks** tab in the playground
 
-```
-OPENAI_API_KEY=your-openai-api-key // change according to model you using
-TAVILY_API_KEY=your-tavily-api-key
-EXA_API_KEY=your-exa-api-key
+## ⚙️ Model Configuration
 
-```
+RecurSearch supports multiple AI models. Configure your preferred AI provider and model in `config/config.ts` by changing the `settingRunTimeContext` variable.
 
-Run Mastra Dev server to create reports
+### Supported Providers
+out of box, Recursearch has support for 
 
-```
-npm run dev
+- OpenAI
+- Claude
+- Gemini
 
-```
+more providers and models can easily be added
 
-Go to search agent and ask it to generate reports, the search agent also as memory enabled so you can ask previous questions
+## 🤖 Agent Architecture
 
-For AgentNetwork go to networks tab and ask it to generate reports.
+### Core RecurSearch Agents
 
-## Model Config
+| Agent | Purpose |
+|-------|---------|
+| **Search Agent** | Orchestrates the research process and formats final reports |
+| **Question Agent** | Generates insightful follow-up research questions |
+| **Custom Question Agent** | Validates question uniqueness to avoid redundancy |
+| **Question Picker Agent** | Selects the most research-focused questions |
+| **Stats Agent** | Generates statistical queries to support findings with data |
+| **Image Agent** | Creates targeted image search queries for visual content |
+| **Content Picker Agent** | Evaluates and selects the most credible web sources |
 
-You can change the working base model of recursearch by going to `config/config.ts` and changing the value of `CURRENT_MODEL` variable, the env variable names for the providers can be found [here](https://sdk.vercel.ai/providers/ai-sdk-providers)
+### AgentNetwork Versions
 
-Right now the following models come out of box
+#### 🎯 Standard Version
+Comprehensive research with web tools and data integration:
+- **simpleSearchAgent** - Initial data gathering
+- **imageSearchAgent** - Research-relevant image discovery
+- **reportFormattingAgent** - User-defined formatting compliance
+- **QuestionAgent, QuestionPickerAgent, CustomQuestionAgent** - Question management
+- **ImageQueryAgent** - Precise image search queries
+- **StatsAgent** - Statistical integration
+- **citationAgent** - Credible source identification
 
-- GPT (defualt)
-- Gemini: gemini-1.5-flash 
-- Anthropic: claude-3-sonnet-20240229
-- Perplexity: sonar-pro
+#### 🔄 Reflection Version
+Enhanced with planning and evaluation agents:
+- **PlannerAgent** - Structures the research process
+- **PlannerEvalAgent** - Evaluates research plan effectiveness
+- **ReportEvalAgent** - Assesses report quality and completeness
 
-The `config/README.md` has a small guide on how to use other models, technically all models that are supported by ai-sdk can be imported but I only have added few in the config file.
+#### 🗣️ Debate Version
+Simulates debate-like processes for controversial topics:
+- **ResearchPresenterAgent** - Presents arguments and findings
+- **ResearchCriticAgent** - Generates counterarguments
+- **ReportJudgeAgent** - Evaluates arguments for balanced conclusions
 
-The `getCurrentModel()` can be directly used in agents property to define a system where different agents are part of various models, though all agents of recursearch use one base model, eventually I will add an example on how to do that.
+> **Note:** Debate version intentionally excludes web tools to focus on reasoning-based arguments.
 
-## RecurSearch Agents
-RecurSearch leverages multiple AI agents with distinct roles:
+## 📁 Example Reports
 
-- **Search Agent**
-Understands users query to call the searchAgentTool which kicks of MAS, its also responsible understand and format the report to meet user defined requirements.
+All example reports are **completely AI-generated** without manual editing.
 
-- **Question Agent:**
-Generates thought-provoking follow-up research questions based on content.
-
-- **Custom Question Agent:**
-Validates whether a newly generated question is thematically unique or overlaps with existing ones.
-
-- **Question Picker Agent:**
-Compares pairs of research questions and selects the most research-focused one.
-
-- **Stats Agent**
-Responsible for generating stats question for given running question to support research content by data
-
-- **Image Agent**
-Responsible for generating image search query for given running answer, to ensure images are research quality
-
-- **Content Picker Agent:**
-Evaluates and picks the most relevant and credible web source from two given options. [When Citations are required]
-
-This Agents collabrate in a team to recursively search the web, and in a decision tree manner pick the best path in the tree to come up with the report.
-
-## RecurSearch AgentNetwork
-
-
-### Recursearch version
-RecurSearch integrates a robust AgentNetwork comprising the following specialized agents:
-
-- **simpleSearchAgent**: Conducts straightforward web searches to gather initial data for research topics.
-- **imageSearchAgent**: Searches for high-quality, research-relevant images to enhance the report.
-- **reportFormattingAgent**: Ensures the final report adheres to user-defined formatting and presentation requirements.
-- **QuestionAgent**: Generates insightful follow-up questions to deepen the research process.
-- **QuestionPickerAgent**: Selects the most research-focused question from a set of generated options.
-- **CustomQuestionAgent**: Validates the uniqueness of newly generated questions to avoid redundancy.
-- **ImageQueryAgent**: Creates precise image search queries to ensure the inclusion of relevant visuals.
-- **StatsAgent**: Generates statistical queries and integrates data to support research findings.
-- **citationAgent**: Identifies and incorporates credible sources to provide citations for the research report.
-
-### Reflection Version
-There is also a reflection version that uses the above agents 
-- **PlannerAgent**: Creates a structured plan for the research process, outlining the sequence of tasks and agent interactions.
-- **PlannerEvalAgent**: Evaluates the effectiveness and feasibility of the research plan created by the PlannerAgent.
-- **ReportEvalAgent**: Assesses the quality, accuracy, and completeness of the final research report, providing feedback for improvements.
-
-### Debate Version
-
-The Debate Version introduces agents designed to simulate a debate-like process to refine research findings and ensure diverse perspectives are considered. These agents include:
-
-- **ResearchPresenterAgent**: Engages in a debate with other agents, presenting arguments for or against specific research findings or questions.
-- **ResearchCriticAgent**: Generates counterarguments to challenge the points raised by the Presenter, fostering a balanced discussion.
-- **ReportJudgeAgent**: Evaluates the arguments and counterarguments to determine the most credible and well-supported conclusions.
-
-
-This version is particularly useful for exploring controversial topics or areas with conflicting information, as it encourages a thorough examination of multiple viewpoints. The reports generated by the Debate Version aim to present a balanced and well-rounded perspective on the research topic. Note the reports do not contain stats/facts as this agents don't use tools this was done on purpose to see how they argue without web data.
-
-These agents collaborate in a multi-agent system, working together to refine and enhance the research process, the reports 
-generated by AgentNetwork is not as accurate as Recursearch, yet they can generate a good report template.
-
-## Highlevel Overview
-can view digrams to understand the flow.
-
-## Examples
-
-### Recursearch Reports (`reports/tree`)
-These reports were **entirely generated by the Recursearch agent system** without any manual edits or modifications.  
-Each report has accompanying **preview screenshots** as proof of authenticity.
-
-Example folder contains reports for the topics:
+### 🌳 RecurSearch Reports (`reports/tree`)
+**Highest quality reports** with full recursive research:
 - The Influence of Chronic Stress on Immune System Function
-- Impact of AI-Generated Content on Journalism and Media Credibility
+- Impact of AI-Generated Content on Journalism and Media Credibility  
 - Impact of Music Therapy on Individuals with Depression
-- How LLMs work
-- Mental health
+- How LLMs Work
+- Mental Health Research
 
----
+*Each report includes preview screenshots as authenticity proof.*
 
-### AgentNetwork Reports
+### 🌐 AgentNetwork Reports (`reports/network/normal`)
+**Template-style reports** with good structure but variable fact quality:
+- Recommendation Algorithms and User Behavior on Social Media
+- Music Therapy and Depression Impact
+- Chronic Stress and Immune Function
 
-#### Normal Version (`reports/network/normal`)
-These are **AgentNetwork-generated reports**.  
-They may vary in **fact quality, citations, and image selection**, but overall provide solid **template-style reports**.  
-Again, **no manual edits** were made.
+### 🔄 Reflection Reports (`reports/network/planaftereval`)
+**Plan-evaluate-improve** methodology reports:
+- How LLMs Work (Reflection Version)
 
-Example topics:
-- General Report on Recommendation Algorithms and User Behavior on Social Media
-- Impact of Music Therapy on Individuals with Depression
-- The Influence of Chronic Stress on Immune System Function
-
-#### Reflection Version (`reports/network/planaftereval`)
-These are **reflection-based versions** of the normal AgentNetwork reports.  
-- it contains how LLMs work report 
-
----
-
-### Debated Reports (`reports/network/debate`)
-These reports were created through **agent debates** and **judged** without using real-world data, statistics, or web research.  
-They showcase **how agents argue points** purely based on internal reasoning.
-
-Example topics:
+### 🗣️ Debate Reports (`reports/network/debate`)
+**Argument-based reports** using pure reasoning (no web data):
 - Benefits of Debate on Research Reports
-- Music Therapy’s Influence on Depression
+- Music Therapy's Influence on Depression
 - Phone Usage vs. Mental Health
 
+## 📊 System Overview
 
-## Use/Terms
+RecurSearch uses a **decision tree approach** where agents collaborate to:
 
-this tool was created to research how agents can generate research reports, the tool must not be used unethically, the authors of recursearch take no responsibility in doing so.
+1. **Generate** multiple research questions
+2. **Validate** question uniqueness and relevance  
+3. **Select** the most promising research paths
+4. **Search** recursively through multiple layers
+5. **Evaluate** content credibility and relevance
+6. **Synthesize** findings into comprehensive reports
+7. **Assess** final output quality and bias
 
-## Papers:
+## ⚖️ Ethics & Usage
 
-Recursearch was inspired by following paper:
+This tool was created for research into multi-agent report generation. 
 
+**Important:** 
+- Must not be used unethically
+- Authors take no responsibility for misuse
+- Always verify AI-generated content
+- Use responsibly for legitimate research purposes
+
+## 📚 Research Foundation
+
+RecurSearch is inspired by:
 - [Multi-Agent Collaboration Mechanisms: A Survey of LLMs](https://arxiv.org/pdf/2501.06322)
 
+## 📄 License
 
-## License
+GPL - Please see license requirements for full terms.
 
-GPL
+## 👥 Authors
 
-Please see the license requirements
+- [@jalpp](https://github.com/jalpp)
 
-## Authors:
+---
 
-- @jalpp 
-
-
-
-
-
-
-
-
-
-
-
+*For detailed architecture diagrams and advanced configuration, see the `/docs` directory.*

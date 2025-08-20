@@ -10,12 +10,13 @@ import {
 
 import { createReport } from "./report";
 import Exa from "exa-js";
+import { MAX_DEPTH } from "../config/config";
 
 const tvly = tavily({ apiKey: process.env.TAVILY_API_KEY });
 
 const exa = new Exa(process.env.EXA_API_KEY);
 
-const MAX_DEPTH = 5;
+
 
 // Report and Citation Variables
 let reportBuilder = "";
@@ -118,6 +119,7 @@ export async function searchWeb(
   }
 
   const res = await tvly.search(searchQuery, {
+    maxTokens: 1000,
     searchDepth: "basic",
     includeRawContent: "text",
     includeAnswer: true,

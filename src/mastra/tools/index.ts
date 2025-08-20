@@ -3,12 +3,14 @@ import { z } from "zod";
 import { Agent } from "@mastra/core/agent";
 import { searchWeb, simepleSearch, imageSearch } from "./search";
 import { createReport } from "./report";
-import { MODEL } from "../config/config";
 import { generateEvalReport } from "./eval";
-import { report } from "process";
+import { getCurrentModel } from "../config/config";
+
 
 export const createAgent = (name: string, instructions: string) =>
-  new Agent({ name, instructions, model: MODEL });
+  new Agent({ name, instructions, model: ({runtimeContext}) => {
+      return getCurrentModel(runtimeContext);
+  } });
 
 export const QuestionAgent = createAgent(
   "Question Agent",
@@ -285,7 +287,7 @@ export const searchWebForReportWithCitations = createTool({
   description:
     "Search the web for content and generate a report with citations.",
   inputSchema: z.object({
-    searchQuery: z.string().describe("The query to search the web."),
+    searchQuery: z.string().describe("A short query to search the web."),
   }),
   outputSchema: z.object({
     report: z.string().optional().describe("Generated report with citations."),

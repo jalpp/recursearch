@@ -119,6 +119,7 @@ export async function searchWeb(
   }
 
   const res = await tvly.search(searchQuery, {
+    maxTokens: 1000,
     searchDepth: "basic",
     includeRawContent: "text",
     includeAnswer: true,

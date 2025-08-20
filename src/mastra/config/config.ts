@@ -28,7 +28,7 @@ type Provider = "openai" | "anthropic" | "google" | "perplexity";
 // change if needed
 const settingRunTimeContext = new RuntimeContext();
 settingRunTimeContext.set("provider", "openai");
-settingRunTimeContext.set("model", "gpt-4o-mini")
+settingRunTimeContext.set("model", "gpt-4o")
 
 // change if needed
 export const MAX_DEPTH = 5;

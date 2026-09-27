@@ -2,6 +2,10 @@
 
 **RecurSearch** is an AI-driven recursive web research tool that performs comprehensive, multi-layered research similar to OpenAI's Deep Research. It uses specialized AI agents to generate detailed research reports with citations, statistics, and relevant images.
 
+⚠️ This project is no longer maintained due to newer version of it worked on called OpenRecurSearch [here](https://github.com/jalpp/OpenRecurSearch) This project is in public archive as of 2026-09-26, 
+
+do use and explore newer version which is faster, better! 
+
 ## ✨ Key Features
 
 - **🔄 Recursive Web Search** - Multi-layered searches that dive deeper with intelligent follow-up questions
